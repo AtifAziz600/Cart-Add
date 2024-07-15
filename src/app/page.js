@@ -1,11 +1,26 @@
-"use client"
-import Image from "next/image";
+"use client";
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
+import axios from "axios";
 import Navbar from "./component/Navbar";
 import Product from "./component/Product";
-import data from '../app/data.json'
 
 export default function Home() {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get("./api/product");
+        setProducts(response.data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   return (
     <div>
       <Head>
@@ -16,11 +31,17 @@ export default function Home() {
 
       <Navbar />
 
-      <section className="container mx-auto">
-        <h1 className="text-4xl mt-4 text-center">Our Products</h1>
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-          {data.map((product) => (
-            <Product product={product} />
+      <section className="container mx-auto mt-8 px-4 md:px-0">
+        <h1 className="text-4xl font-bold text-center text-gray-800">
+          Our Products
+        </h1>
+        <p className="text-center text-gray-600 mt-2">
+          Explore our wide range of products. Quality and satisfaction
+          guaranteed.
+        </p>
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {products.map((product) => (
+            <Product key={product.id} product={product} />
           ))}
         </div>
       </section>

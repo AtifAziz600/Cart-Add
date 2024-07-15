@@ -1,24 +1,24 @@
-import Link from 'next/link';
-import React from 'react'
+import Link from "next/link";
+import React from "react";
 import { FiShoppingCart } from "react-icons/fi";
-import { cartState } from '../../../atoms/cartState';
-import { useRecoilState } from 'recoil';
+import { cartState } from "../../../atoms/cartState";
+import { useRecoilState } from "recoil";
 
 const Navbar = () => {
-    const [cartItem] = useRecoilState(cartState);
+  const [cartItem] = useRecoilState(cartState);
   return (
-    <section className="shadow-xl bg-white sticky top-0">
-      <div className="container mx-auto py-2 text-[24px] flex justify-between items-center">
-        <div className="cursor-pointer">
+    <section className="shadow-lg bg-white sticky top-0 z-50">
+      <div className="container mx-auto py-4 px-6 flex justify-between items-center">
+        <div className="text-2xl font-bold text-gray-800">
           <Link href="/">Logo</Link>
         </div>
 
-        <div className="relative cursor-pointer">
+        <div className="relative cursor-pointer flex items-center">
           <Link href="/cart">
-            <div>
-              <FiShoppingCart />
-              <span className="absolute -top-2 -right-2 text-[13px] bg-red-600 h-[18px] w-[18px] rounded-full grid place-items-center text-white">
-              {cartItem.length}
+            <div className="relative">
+              <FiShoppingCart className="text-3xl text-gray-800" />
+              <span className="absolute -top-2 -right-2 text-xs bg-red-600 h-5 w-5 rounded-full flex items-center justify-center text-white font-bold">
+                {cartItem.length}
               </span>
             </div>
           </Link>
@@ -26,6 +26,6 @@ const Navbar = () => {
       </div>
     </section>
   );
-}
+};
 
-export default Navbar
+export default Navbar;

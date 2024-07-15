@@ -1,10 +1,8 @@
-"use client"
+"use client";
 import React from "react";
 import { cartState } from "../../../atoms/cartState";
 import { useRecoilState } from "recoil";
 import toast from "react-hot-toast";
-
-
 
 const Product = ({ product }) => {
   const [cartItem, setCartItem] = useRecoilState(cartState);
@@ -21,25 +19,23 @@ const Product = ({ product }) => {
         });
       });
     }
-     toast(`${product.name} added to cart`);
+    toast(`${product.name} added to cart`);
   };
 
   return (
-    <div className="bg-[#fff] pt-6 pb-4 shadow-2xl">
+    <div className="bg-white shadow-md rounded-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-lg">
       <img
-        className="mx-auto w-[350px] h-[200px] object-contain"
+        className="w-full h-56 object-cover"
         src={product.image}
-        alt=""
+        alt={product.name}
       />
-
-      <div className="mt-4 px-6">
-        <div className="flex items-center justify-between text-[26px]">
+      <div className="p-4">
+        <div className="flex items-center justify-between text-lg font-semibold text-gray-800">
           <h1>{product.name}</h1>
-          <h3>${product.price}</h3>
+          <h3>{product.price} TK</h3>
         </div>
-
         <button
-          className="bg-red-600 text-white py-4 px-12 mt-4 block mx-auto hover:bg-red-800"
+          className="w-full mt-4 bg-red-600 text-white py-2 rounded hover:bg-red-700 transition duration-300"
           onClick={addItemsToCart}
         >
           Add To Cart

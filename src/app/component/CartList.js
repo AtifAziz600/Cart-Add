@@ -1,21 +1,51 @@
-import React from 'react'
+import React from "react";
 
-const CartList = ({ data }) => {
-    const { name, image, quantity, price } = data;
+const CartList = ({
+  data,
+  onIncreaseQuantity,
+  onDecreaseQuantity,
+  onRemoveItem,
+}) => {
+  const { name, image, quantity, price } = data;
+
   return (
-    <div>
-      <div className="bg-[#fff] max-w-[800px] mx-auto mt-4 py-2 px-6 flex gap-6 items-center justify-between">
-        <img className="h-[100px]" src={image} alt="" />
+    <div className="bg-white shadow-md rounded-lg max-w-3xl mx-auto mt-6 p-6 flex items-center justify-between transition duration-300 hover:shadow-lg">
+      <img
+        className="h-24 w-24 object-cover rounded-lg"
+        src={image}
+        alt={name}
+      />
 
-        <div>
-          <div className="font-bold text-2xl">{name}</div>
-          <div>Qty: {quantity}</div>
+      <div className="flex-1 ml-6">
+        <div className="font-bold text-xl text-gray-800">{name}</div>
+        <div className="text-gray-600 mt-1">Quantity: {quantity}</div>
+        <div className="flex items-center gap-2 mt-2">
+          <button
+            onClick={onDecreaseQuantity}
+            className="bg-gray-300 text-gray-700 px-3 py-1 rounded hover:bg-gray-400 transition duration-300"
+          >
+            -
+          </button>
+          <button
+            onClick={onIncreaseQuantity}
+            className="bg-gray-300 text-gray-700 px-3 py-1 rounded hover:bg-gray-400 transition duration-300"
+          >
+            +
+          </button>
         </div>
-
-        <div className="text-3xl font-bold">${price * quantity}</div>
       </div>
+
+      <div className="text-2xl font-bold text-gray-800">
+        {price * quantity} TK
+      </div>
+      <button
+        onClick={onRemoveItem}
+        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition duration-300"
+      >
+        Remove
+      </button>
     </div>
   );
-}
+};
 
-export default CartList
+export default CartList;
