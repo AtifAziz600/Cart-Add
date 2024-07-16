@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../component/Navbar";
 import { useRecoilState } from "recoil";
 import { cartState } from "../../../atoms/cartState";
@@ -10,26 +10,37 @@ const Cart = () => {
   const [cartItems, setCartItems] = useRecoilState(cartState);
   const router = useRouter();
 
+  useEffect(() => {
+    const storedCart = JSON.parse(localStorage.getItem("cartItems")) || [];
+    setCartItems(storedCart);
+  }, [setCartItems]);
+
+  const updateLocalStorage = (items) => {
+    localStorage.setItem("cartItems", JSON.stringify(items));
+  };
+
   const handleIncreaseQuantity = (id) => {
-    setCartItems(
-      cartItems.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-      )
+    const updatedCart = cartItems.map((item) =>
+      item.id === id ? { ...item, quantity: item.quantity + 1 } : item
     );
+    setCartItems(updatedCart);
+    updateLocalStorage(updatedCart);
   };
 
   const handleDecreaseQuantity = (id) => {
-    setCartItems(
-      cartItems.map((item) =>
-        item.id === id && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      )
+    const updatedCart = cartItems.map((item) =>
+      item.id === id && item.quantity > 1
+        ? { ...item, quantity: item.quantity - 1 }
+        : item
     );
+    setCartItems(updatedCart);
+    updateLocalStorage(updatedCart);
   };
 
   const handleRemoveItem = (id) => {
-    setCartItems(cartItems.filter((item) => item.id !== id));
+    const updatedCart = cartItems.filter((item) => item.id !== id);
+    setCartItems(updatedCart);
+    updateLocalStorage(updatedCart);
   };
 
   const totalPrice = () => {
@@ -38,13 +49,13 @@ const Cart = () => {
     return total;
   };
 
-    const createCheckoutSession = () => {
-      
-      setTimeout(() => {
-        setCartItems([]); 
-        router.push("../success/"); 
-      }, 2000); 
-    };
+  const createCheckoutSession = () => {
+    setTimeout(() => {
+      setCartItems([]);
+      updateLocalStorage([]); // Clear local storage on checkout
+      router.push("../success/");
+    }, 2000);
+  };
 
   return (
     <div>
@@ -71,12 +82,14 @@ const Cart = () => {
             <div className="text-2xl font-bold">Total: TK {totalPrice()}</div>
           </div>
         )}
-        <button
-          className="block mx-auto mt-8 bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-md shadow-lg transition duration-300"
-          onClick={createCheckoutSession}
-        >
-          Checkout
-        </button>
+        {cartItems.length > 0 && (
+          <button
+            className="block mx-auto mt-8 bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-md shadow-lg transition duration-300"
+            onClick={createCheckoutSession}
+          >
+            Checkout
+          </button>
+        )}
       </div>
     </div>
   );

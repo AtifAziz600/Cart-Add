@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { cartState } from "../../../atoms/cartState";
 import { useRecoilState } from "recoil";
 import toast from "react-hot-toast";
@@ -7,18 +7,28 @@ import toast from "react-hot-toast";
 const Product = ({ product }) => {
   const [cartItem, setCartItem] = useRecoilState(cartState);
 
+  useEffect(() => {
+    const storedCart = JSON.parse(localStorage.getItem("cartItems")) || [];
+    setCartItem(storedCart);
+  }, [setCartItem]);
+
+  const updateLocalStorage = (items) => {
+    localStorage.setItem("cartItems", JSON.stringify(items));
+  };
+
   const addItemsToCart = () => {
+    let updatedCart;
     if (cartItem.findIndex((pro) => pro.id === product.id) === -1) {
-      setCartItem((prevState) => [...prevState, product]);
+      updatedCart = [...cartItem, product];
     } else {
-      setCartItem((prevState) => {
-        return prevState.map((item) => {
-          return item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item;
-        });
+      updatedCart = cartItem.map((item) => {
+        return item.id === product.id
+          ? { ...item, quantity: item.quantity + 1 }
+          : item;
       });
     }
+    setCartItem(updatedCart);
+    updateLocalStorage(updatedCart);
     toast(`${product.name} added to cart`);
   };
 
