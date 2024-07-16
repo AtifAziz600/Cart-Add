@@ -52,7 +52,7 @@ const Cart = () => {
   const createCheckoutSession = () => {
     setTimeout(() => {
       setCartItems([]);
-      updateLocalStorage([]); // Clear local storage on checkout
+      updateLocalStorage([]); 
       router.push("../success/");
     }, 2000);
   };
